@@ -4,17 +4,20 @@ import { getMetricMetaInfo, timeToString } from '../utils/helpers'
 import UdaciSlider from './UdaciSlider'
 import UdaciSteppers from './UdaciSteppers'
 import DateHeader from './DateHeader'
-
+import { Ionicons } from '@expo/vector-icons'
+import TextButton from './TextButton'
+import { submitEntry, removeEntry }  from '../utils/api'
 
 function SubmitBtn({ onPress }) {
     return (
         <TouchableOpacity
             onPress={onPress}>
-            <Text>SUBMIT</Text>
+            <Text>Submit</Text>
         </TouchableOpacity>
 
     )
 }
+
 export default class AddEntry extends Component {
     state = {
         run: 0,
@@ -46,7 +49,6 @@ export default class AddEntry extends Component {
                 [metric]: count < 0 ? 0 : count,
             }
         })
-
     }
 
     slide = (metric, value) => {
@@ -73,13 +75,38 @@ export default class AddEntry extends Component {
         // Navigate to home
 
         // Save to home
+        submitEntry({ key, entry })
 
         // Clearn local notification
+    }
+
+    reset = () => {
+        const key = timeToString()
+
+        // Update Redux
+
+        // Route to Home
+
+        //Update "DB"
+        removeEntry( key )
     }
 
     render() {
 
         const metaInfo = getMetricMetaInfo()
+
+        if (this.props.alreadyLogged) {
+            return (
+                <View>
+                    <Ionicons name='ios-happy-outline' size={100} />
+                    <Text>You already logged your information for today</Text>
+                    <TextButton onPress={this.reset}>
+                        Reset
+                    </TextButton>
+                </View>
+            )
+        }
+
 
         return (
             <View>
@@ -93,9 +120,9 @@ export default class AddEntry extends Component {
                         <View key={key}>
                             {getIcon()}
                             {type === 'slider'
-                                ? <UdaciSlider 
+                                ? <UdaciSlider
                                     value={value}
-                                    onChange={(value) => this.slide(key,value)}
+                                    onChange={(value) => this.slide(key, value)}
                                     onIncrement={() => this.increment(key)}
                                     onDecrement={() => this.decrement(key)}
                                     {...rest}
