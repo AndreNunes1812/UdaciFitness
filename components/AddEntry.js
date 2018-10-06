@@ -14,7 +14,6 @@ function SubmitBtn({ onPress }) {
             onPress={onPress}>
             <Text>Submit</Text>
         </TouchableOpacity>
-
     )
 }
 
