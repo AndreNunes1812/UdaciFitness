@@ -84,7 +84,7 @@ export default class AddEntry extends Component {
         return (
             <View>
                 <DateHeader date={(new Date()).toLocaleDateString()} />
-                <Text>{JSON.stringify(this.state)}</Text>
+
                 {Object.keys(metaInfo).map((key) => {
                     const { getIcon, type, ...rest } = metaInfo[key]
                     const value = this.state[key]
@@ -93,8 +93,9 @@ export default class AddEntry extends Component {
                         <View key={key}>
                             {getIcon()}
                             {type === 'slider'
-                                ? <UdaciSlider
+                                ? <UdaciSlider 
                                     value={value}
+                                    onChange={(value) => this.slide(key,value)}
                                     onIncrement={() => this.increment(key)}
                                     onDecrement={() => this.decrement(key)}
                                     {...rest}
